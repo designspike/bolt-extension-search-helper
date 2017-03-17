@@ -42,12 +42,12 @@ class SearchHelperExtension extends SimpleExtension
         $fields = $contentType->getFields();
 
         // do we even have any contenttypes specified in this extension's config?
-        $contentTypeSlug = $contentType->offsetGet('slug');
         if (!isset($config['contenttypes']) or !is_array($config['contenttypes'])) {
             return;
         }
 
         // is this one of the contenttypes that is specified in the extension's config?
+        $contentTypeSlug = $contentType->offsetGet('slug');
         if (!array_key_exists($contentTypeSlug, $config['contenttypes'])) {
             return;
         }
@@ -76,14 +76,15 @@ class SearchHelperExtension extends SimpleExtension
             // loop through each index of the repeater
             foreach ($subject->get($fieldName) as $item) {
                 foreach($item as $value) {
-                    if (is_string($value)) {
-                        // ignore json
-                        json_decode($value);
-                        if (JSON_ERROR_NONE===json_last_error()) {
-                            continue;
-                        }
-                        $globArr[] = strip_tags($value);
+                    if (!is_string($value)) {
+                        continue;
                     }
+                    // ignore json
+                    json_decode($value);
+                    if (JSON_ERROR_NONE===json_last_error()) {
+                        continue;
+                    }
+                    $globArr[] = strip_tags($value);
                 }
             }
         }
@@ -93,27 +94,6 @@ class SearchHelperExtension extends SimpleExtension
         $globStr = trim(preg_replace("@\s+@", " ", $globStr));
 
         $subject->set($keywordField, $globStr);
-    }
-
-    /**
-     * Set up the default configuration.
-     *
-     * @see https://docs.bolt.cm/extensions/basics/configuration#providing-defaults
-     *
-     * @return array
-     */
-    protected function getDefaultConfig()
-    {
-        return [
-            'contenttypes' => [
-                'mycontenttypeslug' => [
-                    'keywordfield' => 'myfieldname',
-                ],
-                'anothercontenttypeslug' => [
-                    'keywordfield' => 'anotherfieldname'
-                ]
-            ]
-        ];
     }
 
 }
