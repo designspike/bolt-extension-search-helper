@@ -1,0 +1,23 @@
+{
+  "name": "designspike/bolt-extension-search-helper",
+  "description": "Makes repeater fields searchable by globbing them into a keyword field of your choice whenever you save.",
+  "type": "bolt-extension",
+  "require": {
+    "bolt/bolt": "^3.0"
+  },
+  "authors": [
+    {
+      "name": "Will Hall",
+      "email": "will@designspike.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Bolt\\Extension\\DesignSpike\\SearchHelper\\": "src/"
+    }
+  },
+  "extra": {
+    "bolt-assets": "web",
+    "bolt-class": "Bolt\\Extension\\DesignSpike\\SearchHelper\\SearchHelperExtension"
+  }
+}
